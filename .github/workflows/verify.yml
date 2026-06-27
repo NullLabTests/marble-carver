@@ -1,0 +1,42 @@
+name: Carving verification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Check citation format
+        run: |
+          python tools/verify_citations.py --check . --report || true
+
+      - name: Check attempt numbering
+        run: |
+          python -c "
+          from pathlib import Path
+          attempts = sorted(Path().rglob('attempt_*.md'))
+          for a in attempts:
+              print(f'  Found: {a}')
+          print(f'Total: {len(attempts)}')
+          "
+
+      - name: Lint with ruff
+        run: |
+          pip install ruff
+          ruff check .

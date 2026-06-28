@@ -1,24 +1,30 @@
 from __future__ import annotations
 
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 from typing import Optional
 
+from rich.console import RenderableType
+from rich.panel import Panel
+from rich.text import Text
 from textual.app import App, ComposeResult
 from textual.binding import Binding
-from textual.containers import Container, Horizontal, Vertical, ScrollableContainer
+from textual.containers import Container, Horizontal, Vertical
 from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import (
-    Button, DataTable, Footer, Header, Input, Label,
-    Markdown, RichLog, Static, TabbedContent, TabPane,
-    Tree
+    Button,
+    DataTable,
+    Footer,
+    Header,
+    Input,
+    Label,
+    Markdown,
+    RichLog,
+    Static,
+    TabbedContent,
+    TabPane,
 )
-from textual import work
-
-from rich.text import Text
-from rich.panel import Panel
-from rich.console import RenderableType
 
 
 class CarverApp(App):
@@ -255,7 +261,11 @@ class CarverApp(App):
                     date = line.split(":", 1)[1].strip().strip("**").strip()
             if not title:
                 title = md_file.stem
-            table.add_row(md_file.stem.replace("attempt_", ""), date, title, status or "In Progress", key=md_file.stem)
+            table.add_row(
+                md_file.stem.replace("attempt_", ""),
+                date, title, status or "In Progress",
+                key=md_file.stem,
+            )
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         btn_id = event.button.id
@@ -288,7 +298,7 @@ class CarverApp(App):
 
     def action_start_session(self) -> None:
         log = self.query_one("#verify-log", RichLog)
-        log.write(f"[bold green]Carving session started[/bold green]")
+        log.write("[bold green]Carving session started[/bold green]")
         log.write(f"Timestamp: {datetime.now().isoformat()}")
         log.write("Document hypothesis -> run small test -> log failure modes")
         log.write("Session will be logged to DAILY_REPORT.md (if exists)")
@@ -350,7 +360,10 @@ class NewAttemptWizard(Screen):
         yield Container(
             Static("New Carving Attempt Wizard", classes="dashboard-title"),
             Label("This will create a new numbered attempt using the template."),
-            Input(placeholder="Short hypothesis title (e.g. 'Spintronic NS blowup v2')", id="hypothesis"),
+            Input(
+                placeholder="Short hypothesis title (e.g. 'Spintronic NS blowup v2')",
+                id="hypothesis",
+            ),
             Input(placeholder="Key method or approach", id="method"),
             Input(placeholder="Expected outcome / success criteria", id="outcome"),
             Button("Create Attempt", id="create-btn", variant="primary"),
@@ -367,7 +380,10 @@ class NewAttemptWizard(Screen):
 
     def _create_attempt(self) -> None:
         hyp = self.query_one("#hypothesis", Input).value or "Untitled Attempt"
-        self.app.notify(f"Attempt created: {hyp}\n(Template filled & saved)", severity="information")
+        self.app.notify(
+            f"Attempt created: {hyp}\n(Template filled & saved)",
+            severity="information",
+        )
         self.app.pop_screen()
         self.app.attempts_count += 1
 

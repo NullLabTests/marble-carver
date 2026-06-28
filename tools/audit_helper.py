@@ -11,7 +11,6 @@ import re
 from datetime import date
 from pathlib import Path
 
-
 AUDIT_NUMBER_RE = re.compile(r"audit_(\d+)")
 ATTEMPT_NUMBER_RE = re.compile(r"attempt_(\d+)")
 

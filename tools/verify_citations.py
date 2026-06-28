@@ -7,14 +7,12 @@ Usage:
 """
 
 import argparse
-import re
-import subprocess
-import sys
-import urllib.request
-import urllib.parse
 import json
+import re
+import sys
+import urllib.parse
+import urllib.request
 from pathlib import Path
-
 
 PMID_RE = re.compile(r"PMID:\s*(\d+)")
 DOI_RE = re.compile(r"DOI:\s*(10\.\S+)")
@@ -61,7 +59,11 @@ def verify_doi(doi: str) -> dict:
             return {
                 "valid": True,
                 "title": msg.get("title", [""])[0] if msg.get("title") else "",
-                "year": (msg.get("published-print") or msg.get("published-online") or {}).get("date-parts", [[None]])[0][0],
+                "year": (
+                    msg.get("published-print")
+                    or msg.get("published-online")
+                    or {}
+                ).get("date-parts", [[None]])[0][0],
                 "source": (msg.get("publisher") or ""),
             }
     except Exception:

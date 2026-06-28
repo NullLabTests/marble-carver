@@ -1,7 +1,7 @@
 """Command-line interface for marble-carver."""
 
-import sys
 import argparse
+import sys
 from pathlib import Path
 
 
@@ -25,7 +25,9 @@ def main():
         help="Path to the carving project (default: current directory)"
     )
 
-    init_parser = subparsers.add_parser("init", help="Initialize a new carving project in current directory")
+    init_parser = subparsers.add_parser(
+        "init", help="Initialize a new carving project in current directory"
+    )
     init_parser.add_argument(
         "--template", "-t",
         choices=["fundamental", "math", "mechanism"],
